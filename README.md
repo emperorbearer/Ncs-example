@@ -1,4 +1,65 @@
-# micro:bit v2 BLE Periodic Advertising 예제
+# micro:bit v2 NCS 예제 모음
+
+각 폴더는 독립적인 nRF Connect SDK 애플리케이션입니다.  
+빌드 아티팩트(`build/`)는 각 프로젝트 폴더 안에 생성되므로 예제끼리 영향을 주지 않습니다.
+
+| 폴더 | 설명 |
+|------|------|
+| `broadcaster/` | BLE Periodic Advertising 송신기 — 카운터를 1초마다 PA로 브로드캐스트 |
+| `receiver/` | BLE Periodic Advertising 수신기 — PA 동기화 후 수신 카운터를 LED에 표시 |
+| `microbit-binary-clock/` | BLE 시간 동기화 Binary Clock — 1초 단위 이진 시계, 버튼 A/B 기능 포함 |
+
+---
+
+## microbit-binary-clock
+
+### 기능
+
+- **Binary Clock**: 5×5 LED에 시/분/초를 이진수로 1초마다 표시
+- **BLE**: `MBit-Clock`으로 광고 → 핸드폰에서 시간을 3바이트로 전송해 동기화
+- **버튼 A**: 현재 시간 저장 (시리얼 출력)
+- **버튼 B**: 하트 패턴 3초 표시
+
+### LED 배치
+
+```
+row 0: ■ ■ ■ ■ ■   시(Hour)       — 5비트  (0~23)
+row 1: · · ■ ■ ■   분 십의 자리   — 3비트  (0~5)
+row 2: · ■ ■ ■ ■   분 일의 자리   — 4비트  (0~9)
+row 3: · · ■ ■ ■   초 십의 자리   — 3비트  (0~5)
+row 4: · ■ ■ ■ ■   초 일의 자리   — 4비트  (0~9)
+MSB → 왼쪽, LSB → 오른쪽
+```
+
+예) **15:23:47**
+```
+row 0 (15 = 01111): · * * * *
+row 1 ( 2 =   010): · · · * ·
+row 2 ( 3 =  0011): · · · * *
+row 3 ( 4 =   100): · · * · ·
+row 4 ( 7 =  0111): · · * * *
+```
+
+### BLE 시간 설정 (nRF Connect 앱)
+
+1. `MBit-Clock` 검색 후 연결
+2. Custom Service `AB120001-...` 선택
+3. Time Characteristic `AB120002-...` 에 **3바이트** Write:
+   ```
+   [시(0x00~0x17), 분(0x00~0x3B), 초(0x00~0x3B)]
+   예) 15:30:00 → 0F 1E 00
+   ```
+
+### 빌드 & 플래시
+
+```bash
+west build -b bbc_microbit_v2 microbit-binary-clock/ --pristine
+west flash
+```
+
+---
+
+## BLE Periodic Advertising 예제 (broadcaster / receiver)
 
 마이크로비트 v2 2대로 구성하는 BLE Periodic Broadcasting 예제입니다.
 
@@ -50,19 +111,27 @@ west flash
 
 ## 프로젝트 구조
 
+각 프로젝트는 독립 폴더로, 빌드 시 `build/` 가 해당 폴더 안에만 생성됩니다.
+
 ```
 .
-├── broadcaster/
+├── broadcaster/                  # PA 송신기
 │   ├── CMakeLists.txt
 │   ├── prj.conf
-│   └── src/
-│       └── main.c        # 송신기: PA 브로드캐스터
-└── receiver/
+│   └── src/main.c
+├── receiver/                     # PA 수신기
+│   ├── CMakeLists.txt
+│   ├── prj.conf
+│   └── src/main.c
+└── microbit-binary-clock/        # BLE Binary Clock
     ├── CMakeLists.txt
     ├── prj.conf
-    └── src/
-        └── main.c        # 수신기: PA 동기화 후 숫자 표시
+    └── src/main.c
 ```
+
+> 새로운 예제를 추가할 때는 루트에 새 폴더를 만들고,
+> 그 안에 `CMakeLists.txt`, `prj.conf`, `src/main.c` 를 작성하면 됩니다.
+> 기존 예제에는 아무런 영향을 주지 않습니다.
 
 ## LED 매트릭스 표시
 
