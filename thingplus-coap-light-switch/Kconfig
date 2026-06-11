@@ -1,0 +1,26 @@
+mainmenu "Thing Plus Matter - CoAP Light Switch"
+
+config LIGHT_SWITCH_COAP_URI
+	string "CoAP resource URI path"
+	default "matter-light"
+	help
+	  Button press sends a CoAP PUT to this resource on the peer.
+
+config LIGHT_SWITCH_PEER_ADDR
+	string "CoAP peer IPv6 address"
+	default "ff03::1"
+	help
+	  Destination of the CoAP request. Default is the realm-local
+	  all-nodes multicast address so every node in the Thread mesh
+	  (including the Border Router host) receives it. Set a unicast
+	  mesh-local address of the bridge host to avoid multicast.
+
+config LIGHT_SWITCH_DEBOUNCE_MS
+	int "Button debounce / rate-limit (ms)"
+	default 250
+	help
+	  Ignore further edges for this long after a press. Arcade
+	  microswitches bounce heavily, and this also rate-limits
+	  CoAP transmissions.
+
+source "Kconfig.zephyr"

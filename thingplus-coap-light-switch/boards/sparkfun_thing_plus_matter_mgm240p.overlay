@@ -1,0 +1,23 @@
+#include <zephyr/dt-bindings/gpio/gpio.h>
+
+/*
+ * 65mm 오락실 버튼 배선:
+ *   마이크로스위치 COM → GND
+ *   마이크로스위치 NO  → PB00 (내부 풀업, 누르면 LOW)
+ *
+ * 다른 핀을 쓰려면 아래 gpios의 포트(&gpiob)와 핀 번호(0)를 바꾸면 된다.
+ */
+/ {
+	aliases {
+		sw0 = &arcade_button;
+	};
+
+	buttons {
+		compatible = "gpio-keys";
+
+		arcade_button: button_0 {
+			gpios = <&gpiob 0 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
+			label = "65mm arcade button";
+		};
+	};
+};

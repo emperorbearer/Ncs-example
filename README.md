@@ -1,13 +1,14 @@
-# micro:bit v2 NCS 예제 모음
+# NCS / Zephyr 예제 모음
 
-각 폴더는 독립적인 nRF Connect SDK 애플리케이션입니다.  
+각 폴더는 독립적인 nRF Connect SDK 또는 Zephyr 애플리케이션입니다.  
 빌드 아티팩트(`build/`)는 각 프로젝트 폴더 안에 생성되므로 예제끼리 영향을 주지 않습니다.
 
-| 폴더 | 설명 |
-|------|------|
-| `broadcaster/` | BLE Periodic Advertising 송신기 — 카운터를 1초마다 PA로 브로드캐스트 |
-| `receiver/` | BLE Periodic Advertising 수신기 — PA 동기화 후 수신 카운터를 LED에 표시 |
-| `microbit-binary-clock/` | BLE 시간 동기화 Binary Clock — 1초 단위 이진 시계, 버튼 A/B 기능 포함 |
+| 폴더 | 보드 | 설명 |
+|------|------|------|
+| `broadcaster/` | micro:bit v2 | BLE Periodic Advertising 송신기 — 카운터를 1초마다 PA로 브로드캐스트 |
+| `receiver/` | micro:bit v2 | BLE Periodic Advertising 수신기 — PA 동기화 후 수신 카운터를 LED에 표시 |
+| `microbit-binary-clock/` | micro:bit v2 | BLE 시간 동기화 Binary Clock — 1초 단위 이진 시계, 버튼 A/B 기능 포함 |
+| `thingplus-coap-light-switch/` | SparkFun Thing Plus Matter (MGM240P) | 65mm 오락실 버튼 → CoAP over Thread → Matter 전등 토글 ([상세 README](thingplus-coap-light-switch/README.md)) — vanilla Zephyr 4.2+로 빌드 |
 
 ---
 
