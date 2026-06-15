@@ -1,4 +1,5 @@
-const BASE = '/api';
+# VITE_API_URL 환경변수로 외부 백엔드 주소 지정 가능 (기본: 같은 서버의 /api)
+const BASE = import.meta.env.VITE_API_URL || '/api';
 
 function getToken() {
   if (typeof localStorage === 'undefined') return null;

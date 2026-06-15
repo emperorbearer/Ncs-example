@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: presentation-scoring
+    env: docker
+    dockerfilePath: presentation-scoring/Dockerfile.render
+    dockerContext: presentation-scoring
+    plan: free
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        value: sqlite:///./scoring.db
